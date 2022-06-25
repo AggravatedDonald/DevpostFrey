@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import json
 
 
 def scrape(location="", age="All", purpose="All"):
@@ -9,11 +10,11 @@ def scrape(location="", age="All", purpose="All"):
     soup = BeautifulSoup(doc, "html.parser")
     events_div = soup.find("div", class_="view view-event-locator-npld view-id-event_locator_npld view-display-id-attachment_2 event-details")
     events_div = events_div.findChild('div', "view-content")
+    print(events_div.prettify())
     if events_div == None:
         return False
     events = events_div.findChildren('div', recursive=False)
     for event in events:
-        # print("-------------------------------")
         event_details = event.find("div", class_="event-description")
         name = event_details.find("h4").text
         event_link = event_details.find("div", class_="field-link").find('a')['href']
@@ -26,7 +27,10 @@ def scrape(location="", age="All", purpose="All"):
         time_start = event_date_div.find("span", class_="date-display-start").text #NEED
         time_end = event_date_div.find("span", class_="date-display-end").text #NEED
         location_div = event_details.findChild("div", "field field-name-field-address field-type-addressfield field-label-above")
-        location = location_div.findChild("div", "field-item even").text #NEED
+        if location_div != None:
+            location = location_div.findChild("div", "field-item even").text #NEED
+        else:
+            location = None
         host_links = event_details.findChild("div", "event-social-links").findChildren("div", recursive=False)
         links = []
         for link in host_links:
@@ -51,6 +55,4 @@ def scrape(location="", age="All", purpose="All"):
             contact_name = contact_name.text
         info.append({"event_name": name, "event_desc": event_paragraph, "date": date, "host_links": links, "org_name": org_name, "contact_title": contact_title, "contact_email": contact_email, "contact_phone": contact_phone, "contact_name": contact_name})
     
-    return info
-
-        
+    return json.dumps(info)
