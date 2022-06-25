@@ -3,7 +3,7 @@ import requests
 import json
 
 
-def scrape(location="", age="All", purpose="All"):
+def scrape(id, location="", age="All", purpose="All"):
     info = []
     url = f"https://www.neefusa.org/npld-event-search-results?field_event_participation_value=All&field_geofield_distance%5Bdistance%5D=100&field_geofield_distance%5Bunit%5D=3959&field_geofield_distance%5Borigin%5D={location}&field_proximity_radius=250&field_date_and_time_value%5Bvalue%5D%5Bdate%5D=Wednesday%2C+June+1%2C+2022&field_date_and_time_value2%5Bvalue%5D%5Bdate%5D=Wednesday%2C+September+21%2C+2022&combine=&field_event_activities_value={purpose}&field_intended_audience_value={age}&field_type_of_training_tid=All"
     doc = requests.get(url).text
@@ -53,6 +53,8 @@ def scrape(location="", age="All", purpose="All"):
         contact_name = event_details.findChild("div", "strong")
         if contact_name != None:
             contact_name = contact_name.text
-        info.append({"event_name": name, "event_desc": event_paragraph, "date": date, "host_links": links, "org_name": org_name, "contact_title": contact_title, "contact_email": contact_email, "contact_phone": contact_phone, "contact_name": contact_name})
+        info.append({"_id": id,  "event_name": name, "event_desc": event_paragraph, "date": date, "host_links": links, "org_name": org_name, "contact_title": contact_title, "contact_email": contact_email, "contact_phone": contact_phone, "contact_name": contact_name})
     
-    return json.dumps(info)
+    data = json.dumps(info)
+    requests.post("http://localhost:8000/output", json=data)
+
