@@ -51,7 +51,7 @@ body{
     bottom: -80px;
 }
 form{
-    height: 520px;
+    height: 600px;
     width: 400px;
     background-color: rgba(255,255,255,0.13);
     position: absolute;
@@ -162,16 +162,15 @@ button{
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form>
-        <h3>Sign Up here</h3>
-
-        <label for="username">Create Username</label>
-        <input type="text" placeholder="Username" id="username">
-
-        <label for="password">Create Password</label>
-        <input type="password" placeholder="Password" id="password">
-
-        <button>Sign Up</button>
+    <form method="POST" action="/register">
+        <h3>Sign Up Here!</h3>
+        <label for="email">Email</label>
+        <input name="Email" type="email" required> 
+        <label for="Username">Fullname</label>
+        <input name="Username" type="text" required> 
+        <label for="Password">Create Password</label>
+        <input name="Password" type="password" required> 
+        <button>Register</button>
     </form>
 </body>
 </html>
