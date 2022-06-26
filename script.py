@@ -64,7 +64,9 @@ def scrape(id, location="", age="All", purpose="All"):
     if main_content_div != None:
         
         events_li = main_content_div.findChild("ul", recursive=False).findChildren("li", recursive=False)
+        count = 0
         for event in events_li:
+            count += 1
             event_page = event.findChild("a")["href"]
             event_page_doc = requests.get(event_page).text
             soup3 = BeautifulSoup(event_page_doc, "html.parser")
@@ -85,7 +87,9 @@ def scrape(id, location="", age="All", purpose="All"):
             
             link = event_page
             info.append({"_id": id, "event_name": title, "event_desc": event_paragraph, "location": location, "date": start_date, "host_links": [link], "org_name": org_name, "contact_title": None, "contact_email": None, "contact_phone": None, "contact_name": None})
-        
+            if count == 5:
+                break
+                
     requests.post("http://l4os.herokuapp.com/output", json=info)
 #print(len(scrape("07094","All","All")))
 #print(scrape("07094","All","All"))
