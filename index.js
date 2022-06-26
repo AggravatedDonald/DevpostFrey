@@ -22,7 +22,7 @@ app.use(session({
     saveUninitialized: true    
 }));
 
-mongoose.connect("mongodb+srv://Genci:w998WvZxyDU98OBk@cluster0.quo1v.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect("",{useNewUrlParser: true, useUnifiedTopology: true})
 .catch(e=>{
     console.log(e)
 })
